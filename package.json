@@ -9,8 +9,9 @@
     "watch": "tsc -w",
     "cdk": "cdk"
   },
- "devDependencies": {
+  "devDependencies": {
     "@types/aws-lambda": "^8.10.145",
+    "@types/jest": "^30.0.0",
     "@types/node": "22.7.4",
     "aws-cdk": "2.1142.0",
     "esbuild": "^0.24.0",
