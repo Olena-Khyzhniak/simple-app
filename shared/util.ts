@@ -32,3 +32,15 @@ export function createDDbDocClient() {
     marshallOptions: marshall, unmarshallOptions: unmarshall
   });
 }
+
+//  utility method for generating HTTP responses
+export const response = (
+  statusCode: number,
+  body: object,
+  headers: Record<string, string> = {},
+): Record<string, any> => ({
+  statusCode,
+  headers: { 'content-type': 'application/json', ...headers },
+  body: JSON.stringify(body),
+});
+
