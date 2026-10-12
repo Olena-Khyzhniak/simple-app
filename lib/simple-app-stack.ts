@@ -135,6 +135,7 @@ new cdk.CfnOutput(this, "Get All Movies Function Url", {
         memorySize: 128,
         environment: {
           CAST_TABLE_NAME: movieCastsTable.tableName,
+          TABLE_NAME: moviesTable.tableName,
           REGION: "eu-west-1",
         },
       }
@@ -148,6 +149,7 @@ new cdk.CfnOutput(this, "Get All Movies Function Url", {
     });
 
     movieCastsTable.grantReadData(getMovieCastMembersFn);
+    moviesTable.grantReadData(getMovieCastMembersFn);
 
     new cdk.CfnOutput(this, "Get Movie Function Url", { value: getMovieByIdURL.url });
 
