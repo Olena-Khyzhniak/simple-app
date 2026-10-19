@@ -96,9 +96,15 @@ export class RestAPIStack extends cdk.Stack {
       CAST_TABLE_NAME: movieCastsTable.tableName,
     });
 
+    const addCastMemberFn = appFn("AddCastMember", 'addCastMember.ts', {
+      CAST_TABLE_NAME: movieCastsTable.tableName,
+    });
+
     moviesTable.grantReadData(getMovieByIdFn);
     movieCastsTable.grantReadData(getMovieCastMembersFn);
     moviesTable.grantReadData(getMovieCastMembersFn);
+    moviesTable.grantReadData(addCastMemberFn);
+    movieCastsTable.grantReadWriteData(addCastMemberFn);
 
     // REST API
 
@@ -122,6 +128,10 @@ export class RestAPIStack extends cdk.Stack {
     movieCastEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getMovieCastMembersFn)
+    );
+    moviesEndpoint.addResource('cast').addMethod(
+      "POST",
+      new apig.LambdaIntegration(addCastMemberFn, { proxy: true })
     );
   }
 }
