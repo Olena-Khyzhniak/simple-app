@@ -20,22 +20,23 @@ export class RestAPIStack extends cdk.Stack {
     const simpleFn = new lambdanode.NodejsFunction(this, "SimpleFn", {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_22_X,
-      entry: `${__dirname}/../lambdas/simple.ts`,
+      entry: `${process.cwd()}/lambdas/simple.ts`,
       timeout: cdk.Duration.seconds(10),
       memorySize: 128,
     });
 
-         const simpleFnURL = simpleFn.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.AWS_IAM,   // CHANGE
+    const simpleFnURL = simpleFn.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
       cors: {
         allowedOrigins: ["*"],
       },
     });
+    new cdk.CfnOutput(this, "SimpleFnURL", { value: simpleFnURL.url });
 
 
     const moviesTable = new dynamodb.Table(this, "MoviesTable", {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      partitionKey: { name: "id", type: dynamodb.AttributeType.NUMBER },
+      partitionKey: { name: "movieId", type: dynamodb.AttributeType.NUMBER },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "Movies",
     });
@@ -81,7 +82,7 @@ export class RestAPIStack extends cdk.Stack {
       new lambdanode.NodejsFunction(this, name, {
         architecture: lambda.Architecture.ARM_64,
         runtime: lambda.Runtime.NODEJS_22_X,
-        entry: `${__dirname}/../lambdas/${entry}`,
+        entry: `${process.cwd()}/lambdas/${entry}`,
         timeout: cdk.Duration.seconds(10),
         memorySize: 128,
         environment: {
